@@ -1,75 +1,64 @@
+const output = document.getElementById("output");
+const recentList = document.getElementById("recentList");
+const clearBtn = document.getElementById("clearHistory");
+
 function generateCitation() {
-    let author = document.getElementById("author").value;
-    let title = document.getElementById("title").value;
-    let year = document.getElementById("year").value;
-    let url = document.getElementById("url").value;
-    let style = document.getElementById("style").value;
+  const author = document.getElementById("author").value;
+  const title = document.getElementById("title").value;
+  const year = document.getElementById("year").value;
+  const url = document.getElementById("url").value;
+  const style = document.getElementById("style").value;
 
-    // Validation
-    if (author === "" || title === "" || year === "" || url === "") {
-        alert("Please fill all fields!");
-        return;
-    }
+  if (!author || !title || !year || !url) {
+    alert("Please fill all fields");
+    return;
+  }
 
-    let citation = "";
+  let citation = "";
 
-    if (style === "apa") {
-        citation = `${author}. (${year}). ${title}. ${url}`;
-    } 
-    else if (style === "mla") {
-        citation = `${author}. "${title}." ${year}, ${url}.`;
-    }
-    else if (style === "chicago") {
-        citation = `${author}. ${title}. ${year}. ${url}.`;
-    }
+  if (style === "APA") {
+    citation = `${author}. (${year}). ${title}. ${url}`;
+  } 
+  else if (style === "MLA") {
+    citation = `${author}. "${title}." ${year}, ${url}.`;
+  } 
+  else if (style === "Chicago") {
+    citation = `${author}. ${title}. ${year}. ${url}.`;
+  }
 
-    document.getElementById("output").value = citation;
-    saveToHistory(citation);
-    showHistory();
+  output.innerText = citation;
+  saveCitation(citation);
+  loadRecent();
 }
 
-// Copy citation
 function copyCitation() {
-    let output = document.getElementById("output");
-    output.select();
-    navigator.clipboard.writeText(output.value);
-    alert("Citation copied!");
+  if (!output.innerText) return;
+  navigator.clipboard.writeText(output.innerText);
+  alert("Citation copied!");
 }
 
-// Download citation
-function downloadCitation() {
-    let text = document.getElementById("output").value;
-    if (text === "") {
-        alert("Generate citation first!");
-        return;
-    }
-
-    let blob = new Blob([text], { type: "text/plain" });
-    let link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "citation.txt";
-    link.click();
+function saveCitation(citation) {
+  let citations = JSON.parse(localStorage.getItem("citations")) || [];
+  citations.unshift(citation);
+  citations = citations.slice(0, 5);
+  localStorage.setItem("citations", JSON.stringify(citations));
 }
 
-// Save last 5 citations
-function saveToHistory(citation) {
-    let history = JSON.parse(localStorage.getItem("citations")) || [];
-    history.unshift(citation);
-    if (history.length > 5) history.pop();
-    localStorage.setItem("citations", JSON.stringify(history));
+function loadRecent() {
+  recentList.innerHTML = "";
+  let citations = JSON.parse(localStorage.getItem("citations")) || [];
+
+  citations.forEach(c => {
+    const li = document.createElement("li");
+    li.textContent = c;
+    recentList.appendChild(li);
+  });
 }
 
-// Show history
-function showHistory() {
-    let history = JSON.parse(localStorage.getItem("citations")) || [];
-    let list = document.getElementById("history");
-    list.innerHTML = "";
+clearBtn.addEventListener("click", () => {
+  localStorage.removeItem("citations");
+  recentList.innerHTML = "";
+});
 
-    history.forEach(c => {
-        let li = document.createElement("li");
-        li.textContent = c;
-        list.appendChild(li);
-    });
-}
+loadRecent();
 
-window.onload = showHistory;
