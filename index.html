@@ -1,41 +1,53 @@
  <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Automated Citation Generator</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <title>Automated Citation Generator</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-  <div class="container">
-    <h2>📚 Citation Generator</h2>
+<div class="container">
+    <h1>📚 Automated Citation Generator</h1>
 
-    <input type="text" id="author" placeholder="Author Name">
-    <input type="text" id="title" placeholder="Title">
-    <input type="text" id="year" placeholder="Year">
-    <input type="text" id="url" placeholder="URL">
+    <label>Author Name</label>
+    <input type="text" id="author" placeholder="Enter author name">
 
+    <label>Title</label>
+    <input type="text" id="title" placeholder="Enter title">
+
+    <label>Year</label>
+    <input type="number" id="year" placeholder="Enter year">
+
+    <label>URL</label>
+    <input type="text" id="url" placeholder="Enter website URL">
+
+    <label>Source Type</label>
+    <select id="sourceType">
+        <option value="website">Website</option>
+        <option value="book">Book</option>
+        <option value="journal">Journal</option>
+    </select>
+
+    <label>Citation Style</label>
     <select id="style">
-      <option value="APA">APA</option>
-      <option value="MLA">MLA</option>
-      <option value="Chicago">Chicago</option>
+        <option value="apa">APA</option>
+        <option value="mla">MLA</option>
+        <option value="chicago">Chicago</option>
     </select>
 
     <button onclick="generateCitation()">Generate Citation</button>
+    <button onclick="copyCitation()">Copy Citation</button>
+    <button onclick="downloadCitation()">Download Citation</button>
 
-    <div class="output" id="output"></div>
-    <button class="copy-btn" onclick="copyCitation()">Copy Citation</button>
+    <h3>Generated Citation</h3>
+    <textarea id="output" readonly></textarea>
 
-    <div class="recent-header">
-      <h3>Recent Searches</h3>
-      <button id="clearHistory">Clear</button>
-    </div>
+    <h3>Recent Citations</h3>
+    <ul id="history"></ul>
+</div>
 
-    <ul id="recentList"></ul>
-  </div>
-
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
 
