@@ -79,8 +79,9 @@ const recentList = document.getElementById("recentList");
 clearBtn.addEventListener("click", () => {
   localStorage.removeItem("citations"); // clear storage
   recentList.innerHTML = ""; // clear UI
-});
+    });
 }
 window.onload = showHistory;
+
 
 
